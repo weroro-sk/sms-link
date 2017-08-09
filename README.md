@@ -24,10 +24,10 @@ Method linkFix() has callback function. Function returns true or false.
 let sms_link = new SmsLink();
 
 sms_link.linkFix((status) => {
-    if (status) {
-        console.log('The Document has sms: links and they was fixed.');    
-    } else {
-        console.log('The Document has not sms: links or your operating system is unsupported.');
-    }
+        let infoText = 'The Document has not sms: links or your operating system is unsupported.';
+        if (status) {
+            infoText = 'The Document has sms: links and they was fixed.';
+        }
+        console.log(infoText);
 });
 ```
