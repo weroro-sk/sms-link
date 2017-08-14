@@ -73,8 +73,8 @@ class SmsLink {
     }
 
     /**
-     * @description Finds and repairs all anchor href with sms: protocol.
-     * @notice  It's not necessary call this method,
+     * @description Finds and corrects all anchors with href SMS: protocol.
+     * @notice  Info for extends: It's not necessary call this method,
      *          if you don't have any anchor tags with sms: protocol on your document.
      *
      * @param {function} [callback]
