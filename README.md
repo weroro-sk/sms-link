@@ -1,4 +1,6 @@
 # sms-link
+*version: 1.1.0*
+
 Finds and corrects all anchors with href SMS: protocol.
 
 usage: 
@@ -14,7 +16,8 @@ Internal device detection will be fully ignored.
 
 example:
 ```javascript
-sms_link.setDefaultSeparator('yourSeparatorHere');
+let sms_link = new SmsLink();
+sms_link.setDefaultSeparator('yourSeparatorHere'); // returns boolean
 
 sms_link.linkFix();
 ```
@@ -30,4 +33,19 @@ sms_link.linkFix((status) => {
         }
         console.log(infoText);
 });
+```
+#### Ignore devices
+Application can ignore devices and apps.
+```javascript
+let sms_link = new SmsLink();
+
+sms_link.ignoreFacebookApp() // ignore facebook app webview
+        .ignoreTablets() // ignore tablet devices
+        .linkFix((status) => {
+                let infoText = 'The Document has not sms: links or your operating system is unsupported.';
+                if (status) {
+                    infoText = 'The Document has sms: links and they was fixed.';
+                }
+                console.log(infoText);
+        });
 ```

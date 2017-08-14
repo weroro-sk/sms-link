@@ -141,7 +141,8 @@ class SmsLink {
     }
 
     /**
-     * Returns true if detect Facebook APP or false
+     * @description Returns true if detect Facebook APP or false
+     *
      * @returns {boolean}
      */
     isFacebookApp() {
@@ -151,7 +152,8 @@ class SmsLink {
     }
 
     /**
-     * Returns iOS version or false
+     * @description Returns iOS version or false
+     *
      * @param {boolean} [intOutput]
      * @returns {Number|boolean}
      */
@@ -172,7 +174,8 @@ class SmsLink {
     }
 
     /**
-     * Returns true if detect Android OS or false
+     * @description Returns true if detect Android OS or false
+     *
      * @param {boolean} [mobileOnly]
      * @returns {boolean}
      */
@@ -238,6 +241,7 @@ class SmsLink {
 
     /**
      * @description Matches and returns all anchor tags with sms: protocol.
+     *
      * @returns {NodeList}
      */
     getSmsElements() {
