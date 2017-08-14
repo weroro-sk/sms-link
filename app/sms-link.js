@@ -23,12 +23,10 @@ class SmsLink {
         this.minIOSVersion = 7; // Because ios7 allegedly does't support sms: protocol
 
         /**
-         * @type {
-                    {
-                        tablet: boolean,
-                        facebook: boolean
-                    }
-                 }
+         * @type {{
+                     tablet: boolean,
+                     facebook: boolean
+                 }}
          */
         this.ignoreList = {
             'tablet': false,
