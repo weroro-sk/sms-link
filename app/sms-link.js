@@ -22,6 +22,19 @@ class SmsLink {
         /** @type {Number} */
         this.minIOSVersion = 7; // Because ios7 allegedly does't support sms: protocol
 
+        /**
+         * @type {
+                    {
+                        tablet: boolean,
+                        facebook: boolean
+                    }
+                 }
+         */
+        this.ignoreList = {
+            'tablet': false,
+            'facebook': false
+        };
+
     }
 
     /**
@@ -36,7 +49,8 @@ class SmsLink {
         let bypass = type === true;
         type = (isNaN(type) || this.empty(type)) ? 5 : type;
         args = args || [];
-        if (this.debug === true || bypass === true) {
+        if (this.debug === true ||
+            bypass === true) {
             switch (type) {
                 case 1 :
                     console.info(inputString, ...args);
@@ -83,7 +97,8 @@ class SmsLink {
      * @returns {SmsLink}
      */
     setMinIOSVersion(version) {
-        if (!this.empty(version) && !isNaN(parseInt(version))) {
+        if (!this.empty(version) &&
+            !isNaN(parseInt(version))) {
             this.minIOSVersion = parseInt(version);
         }
         return this;
@@ -110,6 +125,22 @@ class SmsLink {
     }
 
     /**
+     * @returns {SmsLink}
+     */
+    ignoreFacebookApp() {
+        this.ignoreList.facebook = true;
+        return this;
+    }
+
+    /**
+     * @returns {SmsLink}
+     */
+    ignoreTablets() {
+        this.ignoreList.tablet = true;
+        return this;
+    }
+
+    /**
      * Returns true if detect Facebook APP or false
      * @returns {boolean}
      */
@@ -126,8 +157,14 @@ class SmsLink {
      */
     isIOS(intOutput) {
         /** @type {string} */
-        let version = ('' + (/CPU.*OS ([0-9_]{1,5})|(CPU like).*AppleWebKit.*Mobile/i.exec(this.getUserAgent()) || [0, ''])[1])
+        let userAgent = this.getUserAgent();
+        /** @type {string} */
+        let version = ('' + (/CPU.*OS ([0-9_]{1,5})|(CPU like).*AppleWebKit.*Mobile/i.exec(userAgent) || [0, ''])[1])
             .replace('undefined', '3_2').replace('_', '.').replace('_', '');
+        if (this.ignoreList.tablet === true &&
+            !!userAgent.match(/iPad/i)) {
+            return false;
+        }
         if (intOutput === true) {
             return parseInt(version) || false;
         }
@@ -140,9 +177,16 @@ class SmsLink {
      * @returns {boolean}
      */
     isAndroid(mobileOnly) {
+        /** @type {string} */
         let userAgent = this.getUserAgent();
         if (mobileOnly === true) {
             return !!userAgent.match(/android/i) && !!userAgent.match(/mobile/i);
+        }
+        if (this.ignoreList.tablet === true) {
+            if (!!userAgent.match(/android/i) &&
+                (!!userAgent.match(/mobile/i) === false)) {
+                return false;
+            }
         }
         return !!userAgent.match(/android/i);
     }
@@ -166,7 +210,8 @@ class SmsLink {
         if (typeof mixedVar === 'object') {
             /** @type {string} */
             let objectType = Object.prototype.toString.call(mixedVar).toLowerCase();
-            if (objectType.indexOf('element') !== -1 || objectType.indexOf('html') !== -1) {
+            if (objectType.indexOf('element') !== -1 ||
+                objectType.indexOf('html') !== -1) {
                 return false;
             }
             for (key in mixedVar) {
@@ -184,7 +229,8 @@ class SmsLink {
      * @returns {string}
      */
     smsUrlNormalize(smsFullText) {
-        if (this.empty(this.getDefaultSeparator()) || this.empty(smsFullText)) {
+        if (this.empty(this.getDefaultSeparator()) ||
+            this.empty(smsFullText)) {
             return smsFullText;
         }
         return smsFullText.replace(/&amp;/g, '&').replace(/.body=/, this.getDefaultSeparator() + 'body=');
@@ -207,13 +253,13 @@ class SmsLink {
         if (this.empty(elements)) {
             return false;
         }
-        Array.from(elements).map((element) => {
+        Array.from(elements).map(element => {
             /** @type {string} */
             let newURL = this.smsUrlNormalize(element.href);
-        if (!this.empty(newURL)) {
-            element.href = newURL;
-        }
-    });
+            if (!this.empty(newURL)) {
+                element.href = newURL;
+            }
+        });
         return !this.empty(elements);
     }
 
@@ -226,7 +272,8 @@ class SmsLink {
      */
     setDefaultSeparator(separator) {
         if (typeof separator === 'string' && !this.empty(separator)) {
-            if (this.empty(arguments[1]) || arguments[1] !== 1) {
+            if (this.empty(arguments[1]) ||
+                arguments[1] !== 1) {
                 this.logger('%s - Default separator was defined manually. The separator is "%s"', 1, [this.APP_NAME, separator]);
             }
             this.separator = separator;
@@ -274,7 +321,11 @@ class SmsLink {
             if (os === 'android') {
                 return '?';
             }
-            if (os === 'ios' && (!isNaN(osVersion) && osVersion !== false)) {
+            /** @type {number|NaN} */
+            let version = parseFloat(osVersion);
+            if (os === 'ios' &&
+                !isNaN(version) &&
+                version !== this.getMinIOSVersion()) {
                 return (osVersion < this.getMinIOSVersion()) ? ';' : '&';
             }
         }
@@ -293,7 +344,8 @@ class SmsLink {
     getMobileOperatingSystem(mobileOnly, intOutput) {
         /** @type {object} */
         let objectReturn = {};
-        if (this.isFacebookApp()) {
+        if (this.ignoreList.facebook === true &&
+            this.isFacebookApp()) {
             return objectReturn;
         }
         /** @type {Number|boolean} */
