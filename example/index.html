@@ -20,7 +20,12 @@
 
 <script type="text/javascript">
 
-    let smsLink = new SmsLink(true);
+    let smsLink = new SmsLink(true); // true = debug mode
+
+//    smsLink.setDefaultSeparator('#'); // set # as separator
+
+//    smsLink.ignoreFacebookApp();
+//    smsLink.ignoreTablets();
 
     smsLink.linkFix((status) => {
         let info = document.querySelector('.info');
