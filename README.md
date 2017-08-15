@@ -1,5 +1,5 @@
 # sms-link
-*version: 1.1.0*
+*version: 1.1.1*
 
 Finds and corrects all anchors with href SMS: protocol.
 
