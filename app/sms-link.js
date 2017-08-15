@@ -39,7 +39,7 @@ class SmsLink {
      * @param {string} [inputString]
      * @param {Number} [type]
      * @param {Array} [args]
-     * @returns {SmsLink}
+     * @returns {*}
      */
     logger(inputString, type, args) {
         inputString = inputString || '';
