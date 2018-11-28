@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>Sms-Link example</title>
+<meta name="viewport" id="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=2.0, user-scalable=yes">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" src="../v1.1.2/sms-link.js"></script>
+
+<h2>The SMS: protocol works correctly only on mobile device.</h2>
+
+<a href="sms:098732165@body=You clicked on the Red link." class="red">Red SMS Link</a>
+<a href="sms:+421987321653@body=You clicked on the Green link." class="green">Green SMS Link</a>
+<a href="sms:00421987321652@body=You clicked on the Blue link." class="blue">Blue SMS Link</a>
+
+<p class="info"></p>
+
+<script>
+
+    let smsLink = new SmsLink(true); // true = debug mode
+
+    // smsLink.setDefaultSeparator('#'); // set # as separator
+
+    // smsLink.ignoreFacebookApp();
+    // smsLink.ignoreTablets();
+
+    smsLink.linkFix((status) => {
+        let info = document.querySelector('.info');
+        let infoText = 'The Document has not sms: links or your operating system is unsupported.';
+        if (status) {
+            infoText = 'The Document has sms: links and they were fixed.';
+        }
+        console.log(infoText);
+        info.innerHTML = infoText;
+    });
+
+</script>
